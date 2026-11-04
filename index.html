@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>صبا للعطور | Saba Scents</title>
+<meta name="description" content="صبا للعطور — قريبًا">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;800&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#f6efe4;--ink:#1d2340;--gold:#b8924a;--soft:#7b7466}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:radial-gradient(ellipse at 50% 30%,#fffaf1 0%,var(--bg) 60%,#eadfcb 100%);color:var(--ink);font-family:'Tajawal',sans-serif;display:flex;align-items:center;justify-content:center;padding:24px;overflow-x:hidden}
+  main{text-align:center;max-width:560px;animation:rise 1.4s cubic-bezier(.2,.8,.2,1) both}
+  .bottle{width:84px;height:120px;margin:0 auto 28px;position:relative}
+  .bottle .cap{width:30px;height:22px;background:var(--gold);border-radius:4px;margin:0 auto}
+  .bottle .neck{width:16px;height:10px;background:#d8c39a;margin:0 auto}
+  .bottle .body{width:84px;height:88px;border:2px solid var(--gold);border-radius:14px;background:linear-gradient(180deg,rgba(184,146,74,.08),rgba(184,146,74,.28));position:relative;overflow:hidden}
+  .bottle .body::after{content:"";position:absolute;inset:auto 0 0 0;height:55%;background:linear-gradient(180deg,rgba(184,146,74,.35),rgba(184,146,74,.6));animation:fill 3s ease-in-out infinite alternate}
+  h1{font-weight:800;font-size:clamp(44px,10vw,72px);letter-spacing:.5px}
+  .en{font-family:'Cormorant Garamond',serif;font-size:clamp(18px,4vw,24px);letter-spacing:8px;color:var(--gold);margin-top:4px;text-transform:uppercase}
+  .line{width:64px;height:1px;background:var(--gold);margin:28px auto}
+  p{font-weight:300;font-size:clamp(17px,4vw,20px);line-height:1.9;color:var(--soft)}
+  .soon{display:inline-block;margin-top:30px;padding:10px 28px;border:1px solid var(--gold);border-radius:999px;font-weight:500;color:var(--ink);letter-spacing:1px}
+  footer{position:fixed;bottom:16px;left:0;right:0;text-align:center;font-size:13px;color:var(--soft);font-family:'Cormorant Garamond',serif;letter-spacing:2px}
+  @keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+  @keyframes fill{from{height:40%}to{height:62%}}
+</style>
+</head>
+<body>
+<main>
+  <div class="bottle" aria-hidden="true"><div class="cap"></div><div class="neck"></div><div class="body"></div></div>
+  <h1>صبا</h1>
+  <div class="en">Saba Scents</div>
+  <div class="line"></div>
+  <p>عطور تُشبه نسمة الصبا… هادئة، دافئة، وتبقى في الذاكرة.</p>
+  <span class="soon">قريبًا</span>
+</main>
+<footer>sabascents.com</footer>
+</body>
+</html>
