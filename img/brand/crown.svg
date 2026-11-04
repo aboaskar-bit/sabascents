@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150" role="img" aria-label="Sabascents">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="20%" r="85%">
+      <stop offset="0" stop-color="#7a1230"/>
+      <stop offset="1" stop-color="#2a0510"/>
+    </radialGradient>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f3dfae"/>
+      <stop offset=".55" stop-color="#d8b878"/>
+      <stop offset="1" stop-color="#b8924a"/>
+    </linearGradient>
+  </defs>
+  <rect width="150" height="150" fill="url(#bg)"/>
+  <g fill="none" stroke="url(#g)" stroke-width="4.2" stroke-linejoin="miter" stroke-miterlimit="8">
+    <path d="M26 63 L51 79 L75 40 L99 79 L124 63 L112 91 L38 91 Z"/>
+    <path d="M44 84 L51 79 L58 84 Z M68 82 L75 66 L82 82 Z M92 84 L99 79 L106 84 Z"/>
+  </g>
+  <rect x="38" y="97" width="74" height="4" rx="1" fill="url(#g)"/>
+</svg>
