@@ -386,7 +386,7 @@ button,input,select,textarea{font:inherit;letter-spacing:inherit;color:inherit}
 @media(min-width:1001px){[dir=ltr] .hs .hf{right:0;-webkit-mask-image:linear-gradient(270deg,#000 62%,transparent);mask-image:linear-gradient(270deg,#000 62%,transparent)}}
 @media(max-width:1000px){[dir=ltr] .hs .hf{right:auto;left:0}}
 [dir=ltr] .ident-mark,[dir=ltr] .bmark{direction:rtl}
-[lang=ru] .hshot .ln{font-size:clamp(40px,4vw,80px)}
+
 [lang=ru] .reel .ln,[lang=ru] h1{letter-spacing:-.01em}
 .tools{align-items:center}
 @media(max-width:700px){
@@ -400,3 +400,15 @@ button,input,select,textarea{font:inherit;letter-spacing:inherit;color:inherit}
   .logo small{font-size:11px}
 }
 .hero2 .ctas{max-width:min(760px,52%)}.hero2 .ctas .cta{padding:14px 26px;white-space:nowrap}@media(max-width:1000px){.hero2 .ctas{max-width:none}.hero2 .ctas .cta{white-space:normal}}
+/* Latin/Cyrillic hero headings: tighter, sized for longer words */
+[dir=ltr] .hshot .ln{font-size:clamp(36px,3.6vw,68px);line-height:1.12;letter-spacing:-.012em;margin-bottom:26px;text-wrap:balance}
+[dir=ltr] .hslides{max-width:min(620px,44%)}
+[dir=ltr] .ident h2{line-height:1.08}
+[dir=ltr] .ident .tag{margin-top:14px}
+@media(max-width:1000px){[dir=ltr] .hshot .ln{font-size:clamp(30px,8vw,44px);line-height:1.12}[dir=ltr] .hslides{max-width:none}}
+/* identity section: Kingdom of Saba backdrop (incense smoke drawing Istanbul, frankincense caravan) */
+.ident{background:radial-gradient(ellipse 46% 58% at 50% 50%,rgba(30,4,12,.72),rgba(30,4,12,.25) 70%,transparent),linear-gradient(180deg,rgba(30,4,12,.35),rgba(30,4,12,.1) 40%,rgba(30,4,12,.55)),url(/img/bg/ident-d.webp) center/cover no-repeat,#2a0510;padding:120px 0}
+.ident-mark{color:rgba(216,184,120,.035)}
+.pillars li{background:rgba(30,4,12,.45);backdrop-filter:blur(6px)}
+@media(max-width:1000px){.ident{background:linear-gradient(180deg,rgba(30,4,12,.55),rgba(30,4,12,.7) 45%,rgba(30,4,12,.85)),url(/img/bg/ident-m.webp) 0 0/cover no-repeat,#2a0510;padding:84px 0}}
+@media(min-width:1001px){.ident{min-height:min(54vw,1000px);display:flex;align-items:center;background-position:center,center,center 28%,center}.ident>.wrap{width:100%}}
