@@ -34,3 +34,60 @@ document.querySelectorAll('.fbar').forEach(ch => {
 
 // size -> whatsapp message
 document.querySelectorAll('.vars input').forEach(i => i.addEventListener('change', () => { const w = document.getElementById('wabtn'); if (w) w.href = i.dataset.wa; }));
+
+// 3D category deck (coverflow): arrows, dots, swipe/drag, click side card to bring it front
+document.querySelectorAll('[data-deck]').forEach(deck => {
+  const cards = [...deck.querySelectorAll('.dcard')], n = cards.length;
+  const dots = deck.parentElement.querySelector('.ddots');
+  if (dots) dots.innerHTML = cards.map(() => '<i></i>').join('');
+  let cur = 0, timer;
+  const rtl = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
+  function render() {
+    const narrow = innerWidth < 560;
+    cards.forEach((c, i) => {
+      let off = i - cur; if (off > n / 2) off -= n; if (off < -n / 2) off += n;
+      const a = Math.abs(off), dir = rtl ? -1 : 1;
+      const x = off * (narrow ? 58 : 62) * dir, rot = -off * 38 * dir, z = -a * 160;
+      c.style.transform = `translateX(${x}%) translateZ(${z}px) rotateY(${rot}deg)`;
+      c.style.zIndex = 30 - a; c.style.opacity = a > 2 ? 0 : 1; c.classList.toggle('on', off === 0);
+      c.setAttribute('aria-hidden', a > 2); c.tabIndex = off === 0 ? 0 : -1;
+    });
+    dots && [...dots.children].forEach((d, i) => d.classList.toggle('on', i === cur));
+  }
+  const go = d => { cur = (cur + d + n) % n; render(); };
+  deck.querySelector('.prev').addEventListener('click', () => { go(-1); stop(); });
+  deck.querySelector('.next').addEventListener('click', () => { go(1); stop(); });
+  cards.forEach((c, i) => c.addEventListener('click', e => { if (moved) { e.preventDefault(); return; } if (i !== cur) { e.preventDefault(); cur = i; render(); stop(); } }));
+  let sx = null, moved = false;
+  deck.addEventListener('pointerdown', e => { sx = e.clientX; moved = false; });
+  deck.addEventListener('pointermove', e => { if (sx !== null && Math.abs(e.clientX - sx) > 12) moved = true; });
+  deck.addEventListener('pointerup', e => { if (sx === null) return; const dx = e.clientX - sx; sx = null; if (Math.abs(dx) > 40) { go((dx < 0 ? 1 : -1) * (rtl ? -1 : 1)); stop(); } setTimeout(() => moved = false, 0); });
+  const stop = () => { clearInterval(timer); timer = null; };
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting && !timer && timer !== 0) timer = setInterval(() => go(1), 3800); }), { threshold: .4 });
+    io.observe(deck); deck.addEventListener('pointerenter', () => { stop(); timer = 0; });
+  }
+  addEventListener('resize', render); render();
+});
+
+// "request a perfume" form -> email (FormSubmit) when configured, otherwise a ready WhatsApp message
+document.querySelectorAll('.req-f').forEach(f => {
+  const msg = f.querySelector('.req-msg');
+  f.addEventListener('submit', async e => {
+    e.preventDefault();
+    const d = Object.fromEntries(new FormData(f));
+    if (d._honey) return;
+    const miss = ['perfume', 'name', 'contact'].filter(k => !String(d[k] || '').trim());
+    if (miss.length) { msg.textContent = 'فضلاً عبّئ الحقول المطلوبة (*)'; f.querySelector(`[name=${miss[0]}]`).focus(); return; }
+    const text = `طلب عطر جديد 🌹\nالعطر: ${d.perfume}${d.brand ? '\nالماركة: ' + d.brand : ''}\nالاسم: ${d.name}\nللتواصل: ${d.contact}${d.notes ? '\nملاحظات: ' + d.notes : ''}`;
+    if (f.dataset.email) {
+      msg.textContent = 'جارٍ الإرسال…';
+      try {
+        const r = await fetch('https://formsubmit.co/ajax/' + f.dataset.email, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ _subject: 'طلب عطر جديد — ' + d.perfume, _template: 'table', 'العطر': d.perfume, 'الماركة': d.brand, 'الاسم': d.name, 'للتواصل': d.contact, 'ملاحظات': d.notes }) });
+        if (!r.ok) throw 0; msg.textContent = 'وصلنا طلبك ✓ — بنتواصل معك قريب.'; f.reset(); return;
+      } catch { msg.textContent = 'تعذّر الإرسال بالإيميل، نفتح لك واتساب بدلاً منه…'; }
+    }
+    window.open(`https://wa.me/${f.dataset.wa}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+    msg.textContent = 'انفتحت رسالة واتساب جاهزة بطلبك — اضغط إرسال ✓'; f.reset();
+  });
+});

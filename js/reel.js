@@ -9,7 +9,8 @@
   const keys = Object.keys(counts).sort();
   const imgs = keys.map(k => new Array(counts[k]));
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const src = (si, i) => `/reel/${keys[si]}/${String(i + 1).padStart(3, '0')}.webp`;
+  const set = innerWidth >= 1000 ? 'd' : 'm';
+  const src = (si, i) => `/reel/${set}/${keys[si]}/${String(i + 1).padStart(3, '0')}.webp`;
   const get = (si, i) => {
     let im = imgs[si][i];
     if (!im) { im = imgs[si][i] = new Image(); im.decoding = 'async'; im.src = src(si, i); im.onload = () => { if (si === cur.si) draw(); }; }
@@ -50,11 +51,11 @@
       ctx.drawImage(lay, x, y); ctx.globalAlpha = 1; return true;
     }
     // 2) sharp vertical shot, full height, on the visual left (text sits on the right in RTL), edges feathered
-    const h = cv.height * 1.04, w = iw * (h / ih), x = Math.max(cv.width * 0.06, cv.width * 0.3 - w / 2), y = (cv.height - h) / 2;
+    const h = cv.height, w = iw * (h / ih), x = Math.max(0, Math.min(cv.width * 0.27 - w / 2, cv.width * 0.5 - w)), y = 0;
     lay.width = Math.ceil(w); lay.height = Math.ceil(h);
     lx.globalCompositeOperation = 'source-over'; lx.drawImage(im, 0, 0, lay.width, lay.height);
     const g = lx.createLinearGradient(0, 0, lay.width, 0);
-    g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(0.16, 'rgba(0,0,0,1)'); g.addColorStop(0.84, 'rgba(0,0,0,1)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+    g.addColorStop(0, x > 2 ? 'rgba(0,0,0,0)' : 'rgba(0,0,0,1)'); g.addColorStop(0.1, 'rgba(0,0,0,1)'); g.addColorStop(0.86, 'rgba(0,0,0,1)'); g.addColorStop(1, 'rgba(0,0,0,0)');
     lx.globalCompositeOperation = 'destination-in'; lx.fillStyle = g; lx.fillRect(0, 0, lay.width, lay.height);
     ctx.drawImage(lay, x, y); ctx.globalAlpha = 1; return true;
   }
