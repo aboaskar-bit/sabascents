@@ -1,13 +1,23 @@
+// i18n (page language from <html lang>)
+const LG = document.documentElement.lang || "ar";
+const ruPl = (n, a, b, c) => { const m10 = n % 10, m100 = n % 100; return m10 === 1 && m100 !== 11 ? a : m10 >= 2 && m10 <= 4 && (m100 < 10 || m100 >= 20) ? b : c; };
+const TX = {
+  ar: { none: "لا توجد نتائج", out: " · نفدت", count: n => n + " منتج", req: "فضلاً عبّئ الحقول المطلوبة (*)", sending: "جارٍ الإرسال…", ok: "وصلنا طلبك ✓ — بنتواصل معك قريب.", fail: "تعذّر الإرسال بالإيميل، نفتح لك واتساب بدلاً منه…", wa: "انفتحت رسالة واتساب جاهزة بطلبك — اضغط إرسال ✓", view: "شاهد", msg: d => ["طلب عطر جديد 🌹", "العطر: " + d.perfume, d.brand ? "الماركة: " + d.brand : "", "الاسم: " + d.name, "للتواصل: " + d.contact, d.notes ? "ملاحظات: " + d.notes : ""].filter(Boolean).join("\n") },
+  en: { none: "No results", out: " · sold out", count: n => n + (n === 1 ? " product" : " products"), req: "Please fill in the required fields (*)", sending: "Sending…", ok: "Request received ✓ — we’ll be in touch soon.", fail: "Email failed, opening WhatsApp instead…", wa: "A ready WhatsApp message opened — just press send ✓", view: "View", msg: d => ["New perfume request 🌹", "Perfume: " + d.perfume, d.brand ? "Brand: " + d.brand : "", "Name: " + d.name, "Contact: " + d.contact, d.notes ? "Notes: " + d.notes : ""].filter(Boolean).join("\n") },
+  tr: { none: "Sonuç bulunamadı", out: " · tükendi", count: n => n + " ürün", req: "Lütfen zorunlu alanları doldurun (*)", sending: "Gönderiliyor…", ok: "Talebiniz alındı ✓ — en kısa sürede dönüş yapacağız.", fail: "E-posta gönderilemedi, WhatsApp açılıyor…", wa: "Hazır WhatsApp mesajı açıldı — sadece gönderin ✓", view: "İncele", msg: d => ["Yeni parfüm talebi 🌹", "Parfüm: " + d.perfume, d.brand ? "Marka: " + d.brand : "", "Ad: " + d.name, "İletişim: " + d.contact, d.notes ? "Notlar: " + d.notes : ""].filter(Boolean).join("\n") },
+  ru: { none: "Ничего не найдено", out: " · нет в наличии", count: n => n + " " + ruPl(n, "товар", "товара", "товаров"), req: "Пожалуйста, заполните обязательные поля (*)", sending: "Отправка…", ok: "Запрос получен ✓ — скоро свяжемся с вами.", fail: "Не удалось отправить e-mail, открываем WhatsApp…", wa: "Открылось готовое сообщение в WhatsApp — просто отправьте ✓", view: "Смотреть", msg: d => ["Новый запрос аромата 🌹", "Аромат: " + d.perfume, d.brand ? "Бренд: " + d.brand : "", "Имя: " + d.name, "Контакт: " + d.contact, d.notes ? "Комментарий: " + d.notes : ""].filter(Boolean).join("\n") }
+}[LG] || null;
+const T = TX || {};
 // search
 const sb = document.getElementById('sbtn'), box = document.getElementById('sbox'), q = document.getElementById('sq'), res = document.getElementById('sres');
 let IDX = null;
 const norm = s => (s || '').toLowerCase().replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي');
-async function load() { if (!IDX) IDX = await fetch('/search.json').then(r => r.json()); }
+async function load() { if (!IDX) IDX = await fetch(LG === 'ar' ? '/search.json' : '/search-' + LG + '.json').then(r => r.json()); }
 sb && sb.addEventListener('click', async () => { box.hidden = !box.hidden; if (!box.hidden) { q.focus(); await load(); } });
 q && q.addEventListener('input', async () => {
   await load(); const t = norm(q.value.trim()); if (!t) { res.innerHTML = ''; return; }
   const hits = IDX.filter(p => norm(p.n + ' ' + p.a + ' ' + p.b).includes(t)).slice(0, 12);
-  res.innerHTML = hits.length ? hits.map(p => `<a href="${p.u}"><img src="${p.i}" alt="" loading="lazy"><span><b>${p.n}</b> ${p.a ? '· ' + p.a : ''}<br><small>${p.b} — ${p.pr.toLocaleString('en-US')} ₺${p.s ? '' : ' · نفدت'}</small></span></a>`).join('') : '<p>لا توجد نتائج</p>';
+  res.innerHTML = hits.length ? hits.map(p => `<a href="${p.u}"><img src="${p.i}" alt="" loading="lazy"><span><b>${p.n}</b> ${p.a ? '· ' + p.a : ''}<br><small>${p.b} — ${p.pr.toLocaleString('en-US')} ₺${p.s ? '' : T.out}</small></span></a>`).join('') : '<p>' + T.none + '</p>';
 });
 const qs = new URLSearchParams(location.search).get('q');
 if (qs && q) { box.hidden = false; q.value = qs; q.dispatchEvent(new Event('input')); }
@@ -19,7 +29,7 @@ document.querySelectorAll('.fbar').forEach(ch => {
   const apply = (b, push) => {
     ch.querySelectorAll('.chips button').forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b); });
     let n = 0; grid.querySelectorAll('.pc').forEach(c => { const show = b.dataset.f === '*' || c.dataset.b === b.dataset.f; c.hidden = !show; if (show) n++; });
-    if (cnt) cnt.textContent = n + ' منتج';
+    if (cnt) cnt.textContent = T.count(n);
     if (push) { const u = new URL(location); b.dataset.f === '*' ? u.searchParams.delete('brand') : u.searchParams.set('brand', b.dataset.f); history.replaceState(null, '', u); }
   };
   ch.querySelectorAll('.chips button').forEach(b => b.addEventListener('click', () => { apply(b, true); b.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' }); }));
@@ -78,17 +88,17 @@ document.querySelectorAll('.req-f').forEach(f => {
     const d = Object.fromEntries(new FormData(f));
     if (d._honey) return;
     const miss = ['perfume', 'name', 'contact'].filter(k => !String(d[k] || '').trim());
-    if (miss.length) { msg.textContent = 'فضلاً عبّئ الحقول المطلوبة (*)'; f.querySelector(`[name=${miss[0]}]`).focus(); return; }
-    const text = `طلب عطر جديد 🌹\nالعطر: ${d.perfume}${d.brand ? '\nالماركة: ' + d.brand : ''}\nالاسم: ${d.name}\nللتواصل: ${d.contact}${d.notes ? '\nملاحظات: ' + d.notes : ''}`;
+    if (miss.length) { msg.textContent = T.req; f.querySelector(`[name=${miss[0]}]`).focus(); return; }
+    const text = T.msg(d);
     if (f.dataset.email) {
-      msg.textContent = 'جارٍ الإرسال…';
+      msg.textContent = T.sending;
       try {
         const r = await fetch('https://formsubmit.co/ajax/' + f.dataset.email, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ _subject: 'طلب عطر جديد — ' + d.perfume, _template: 'table', 'العطر': d.perfume, 'الماركة': d.brand, 'الاسم': d.name, 'للتواصل': d.contact, 'ملاحظات': d.notes }) });
-        if (!r.ok) throw 0; msg.textContent = 'وصلنا طلبك ✓ — بنتواصل معك قريب.'; f.reset(); return;
-      } catch { msg.textContent = 'تعذّر الإرسال بالإيميل، نفتح لك واتساب بدلاً منه…'; }
+        if (!r.ok) throw 0; msg.textContent = T.ok; f.reset(); return;
+      } catch { msg.textContent = T.fail; }
     }
     window.open(`https://wa.me/${f.dataset.wa}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
-    msg.textContent = 'انفتحت رسالة واتساب جاهزة بطلبك — اضغط إرسال ✓'; f.reset();
+    msg.textContent = T.wa; f.reset();
   });
 });
 
@@ -137,7 +147,7 @@ if (!RM && 'IntersectionObserver' in window) {
   const groups = ['main section h2', 'main .eyebrow', '.pg', '.pillars', '.bgrid2', '.shop3d .deck', '.req-in', '.faq', '.pdg', '.phead'];
   document.querySelectorAll(groups.join(',')).forEach(el => {
     if (el.closest('.hero2') || el.getBoundingClientRect().top < innerHeight) return;
-    el.classList.add('rv'); io.observe(el);
+    el.classList.add('rvl'); io.observe(el);
   });
   document.querySelectorAll('.pg').forEach(g => [...g.children].forEach((c, i) => c.style.setProperty('--d', (i % 4) * 0.06 + 's')));
 }
@@ -157,7 +167,7 @@ if (FINE && !RM) {
 // luxury cursor + magnetic buttons
 if (FINE && !RM) {
   const root = document.documentElement;
-  const ring = document.createElement('div'); ring.className = 'cur'; ring.innerHTML = '<span>شاهد</span>';
+  const ring = document.createElement('div'); ring.className = 'cur'; ring.innerHTML = '<span>' + T.view + '</span>';
   const dot = document.createElement('div'); dot.className = 'cur-dot';
   document.body.append(ring, dot);
   let mx = -100, my = -100, rx = -100, ry = -100, running = false;
@@ -189,3 +199,10 @@ if (FINE && !RM) {
     b.addEventListener('pointerleave', () => { b.style.translate = ''; });
   });
 }
+
+// language menu: collapsed on phones
+document.querySelectorAll('.langs').forEach(n => {
+  const cur = n.querySelector('[aria-current]');
+  cur && cur.addEventListener('click', e => { if (innerWidth <= 700) { e.preventDefault(); n.classList.toggle('open'); } });
+  document.addEventListener('click', e => { if (!n.contains(e.target)) n.classList.remove('open'); });
+});
