@@ -15,7 +15,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/img/brand/icon-192.png" sizes="192x192"><link rel="apple-touch-icon" href="/img/brand/icon-192.png">
 <link rel="preload" href="/fonts/thmanyahsans-Regular.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/site.css?v=e4e2aee5">
+<link rel="stylesheet" href="/css/site.css?v=f610a752">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Product","name":"Sherlock","alternateName":"شيرلوك","sku":"assaf-sherlock","inLanguage":"ru","brand":{"@type":"Brand","name":"Assaf"},"category":"Унисекс / Парфюм","description":"Загадочный аромат, вдохновлённый знаменитым сыщиком: открывается бергамотом и цветком апельсина с оттенком лабданума. Углубляется кардамоном и амброксаном и завершается сандалом и мускусом.","image":["https://sabascents.com/img/p/assaf-sherlock-1200.webp"],"url":"https://sabascents.com/ru/p/assaf-sherlock/","offers":[{"@type":"Offer","priceCurrency":"TRY","price":2200,"name":"200 ml","availability":"https://schema.org/InStock","seller":{"@id":"https://sabascents.com/#store"},"url":"https://sabascents.com/ru/p/assaf-sherlock/"}],"additionalProperty":[{"@type":"PropertyValue","name":"Семейство","value":"Пряный восточный"}]}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная","item":"https://sabascents.com/ru/"},{"@type":"ListItem","position":2,"name":"Assaf","item":"https://sabascents.com/ru/brands/assaf/"},{"@type":"ListItem","position":3,"name":"Sherlock","item":"https://sabascents.com/ru/p/assaf-sherlock/"}]}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Сколько стоит Sherlock в Турции?","acceptedAnswer":{"@type":"Answer","text":"200 мл: 2,200 ₺ в Sabascents."}},{"@type":"Question","name":"Sherlock есть в наличии?","acceptedAnswer":{"@type":"Answer","text":"Да, сейчас в наличии — заказать можно напрямую в WhatsApp или Instagram."}},{"@type":"Question","name":"Sherlock оригинальный?","acceptedAnswer":{"@type":"Answer","text":"Да, вся продукция Sabascents — оригинал от Assaf."}}]}</script>
@@ -42,6 +42,14 @@
     <div class="cart-list" id="clist"></div>
     <p class="cart-empty" id="cempty">Корзина пуста — выберите ароматы и нажмите «В корзину».</p>
     <div class="cart-ft" id="cft">
+      <fieldset class="cart-dl" id="cdl"><legend>Куда доставить?</legend>
+        <label class="dl-o"><input type="radio" name="dl" value="ist-courier" data-fee="400" data-t="По Стамбулу — курьер" data-pay="Оплата при получении"><span><b>По Стамбулу — курьер</b><small>Оплата при получении</small></span><em>400 ₺</em></label>
+        <label class="dl-o"><input type="radio" name="dl" value="ist-cargo" data-fee="200" data-t="По Стамбулу — транспортная компания" data-pay="Оплата только переводом по IBAN"><span><b>По Стамбулу — транспортная компания</b><small>Оплата только переводом по IBAN</small></span><em>200 ₺</em></label>
+        <label class="dl-o"><input type="radio" name="dl" value="out-cargo" data-fee="250" data-t="За пределами Стамбула — транспортная компания" data-pay="Оплата только переводом по IBAN"><span><b>За пределами Стамбула — транспортная компания</b><small>Оплата только переводом по IBAN</small></span><em>250 ₺</em></label>
+        <p class="dl-n">Для крупных заказов доставка может стоить немного дороже — зависит от веса.</p>
+      </fieldset>
+      <div class="cart-sub"><span>Ароматы</span><b id="csub"></b></div>
+      <div class="cart-sub"><span>Доставка</span><b id="cship">—</b></div>
       <div class="cart-tot"><span>Итого</span><b id="ctot"></b></div>
       <a class="btn wa" id="csend" href="https://wa.me/905350118486" target="_blank" rel="noopener"><svg viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" d="M16 3a13 13 0 0 0-11.2 19.6L3 29l6.6-1.7A13 13 0 1 0 16 3zm0 23.6a10.6 10.6 0 0 1-5.4-1.5l-.4-.2-3.9 1 1-3.8-.2-.4A10.6 10.6 0 1 1 16 26.6zm5.8-7.9c-.3-.2-1.9-.9-2.2-1s-.5-.2-.7.2-.8 1-1 1.2-.4.2-.7 0a8.7 8.7 0 0 1-4.3-3.8c-.3-.6.3-.5 1-1.7.1-.2 0-.4 0-.6l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6a1.2 1.2 0 0 0-.9.4 3.6 3.6 0 0 0-1.1 2.7 6.3 6.3 0 0 0 1.3 3.3 14.4 14.4 0 0 0 5.5 4.9c2 .9 2.8.9 3.8.8a3.2 3.2 0 0 0 2.1-1.5 2.6 2.6 0 0 0 .2-1.5c-.1-.2-.3-.3-.6-.5z"/></svg><span>Отправить весь заказ в WhatsApp</span></a>
       <p class="hint">Одно сообщение со всеми ароматами, объёмами, количеством и суммой — просто отправьте.</p>
@@ -122,6 +130,6 @@
   <p class="copy">© 2026 Sabascents — Названия брендов и ароматов принадлежат их владельцам. Оценки взяты с указанных парфюмерных сайтов.</p>
 </div></footer>
 <a class="fab" href="https://wa.me/905350118486?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%20%F0%9F%8C%B9%20%D0%A5%D0%BE%D1%87%D1%83%20%D1%83%D0%B7%D0%BD%D0%B0%D1%82%D1%8C%20%D0%BE%20%D0%B2%D0%B0%D1%88%D0%B8%D1%85%20%D0%B0%D1%80%D0%BE%D0%BC%D0%B0%D1%82%D0%B0%D1%85" target="_blank" rel="noopener" aria-label="Написать в WhatsApp"><svg viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" d="M16 3a13 13 0 0 0-11.2 19.6L3 29l6.6-1.7A13 13 0 1 0 16 3zm0 23.6a10.6 10.6 0 0 1-5.4-1.5l-.4-.2-3.9 1 1-3.8-.2-.4A10.6 10.6 0 1 1 16 26.6zm5.8-7.9c-.3-.2-1.9-.9-2.2-1s-.5-.2-.7.2-.8 1-1 1.2-.4.2-.7 0a8.7 8.7 0 0 1-4.3-3.8c-.3-.6.3-.5 1-1.7.1-.2 0-.4 0-.6l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6a1.2 1.2 0 0 0-.9.4 3.6 3.6 0 0 0-1.1 2.7 6.3 6.3 0 0 0 1.3 3.3 14.4 14.4 0 0 0 5.5 4.9c2 .9 2.8.9 3.8.8a3.2 3.2 0 0 0 2.1-1.5 2.6 2.6 0 0 0 .2-1.5c-.1-.2-.3-.3-.6-.5z"/></svg></a>
-<script src="/js/site.js?v=b79a7aa4" defer></script>
+<script src="/js/site.js?v=1d58e592" defer></script>
 </body>
 </html>

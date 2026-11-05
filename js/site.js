@@ -210,10 +210,10 @@ document.querySelectorAll('.langs').forEach(n => {
 // ---------------- order basket (one WhatsApp message for many perfumes) ----------------
 (() => {
   const CT = {
-    ar: { hi: 'السلام عليكم 🌹', intro: 'أبغى أطلب من سبأ للعطور:', total: 'المجموع', added: 'انضاف للسلة ✓', rm: 'حذف', inc: 'زيادة', dec: 'إنقاص', items: n => n + (n === 1 ? ' عطر' : n === 2 ? ' عطران' : n <= 10 ? ' عطور' : ' عطر') },
-    en: { hi: 'Hello 🌹', intro: 'I’d like to order from Sabascents:', total: 'Total', added: 'Added to basket ✓', rm: 'Remove', inc: 'More', dec: 'Less', items: n => n + (n === 1 ? ' item' : ' items') },
-    tr: { hi: 'Merhaba 🌹', intro: 'Sabascents’ten sipariş vermek istiyorum:', total: 'Toplam', added: 'Sepete eklendi ✓', rm: 'Kaldır', inc: 'Artır', dec: 'Azalt', items: n => n + ' ürün' },
-    ru: { hi: 'Здравствуйте 🌹', intro: 'Хочу заказать в Sabascents:', total: 'Итого', added: 'Добавлено в корзину ✓', rm: 'Удалить', inc: 'Больше', dec: 'Меньше', items: n => n + ' ' + ruPl(n, 'товар', 'товара', 'товаров') },
+    ar: { hi: 'السلام عليكم 🌹', intro: 'أبغى أطلب من سبأ للعطور:', total: 'المجموع', sub: 'العطور', ship: 'التوصيل', pay: 'الدفع', pick: 'اختر طريقة التوصيل أول 👆', added: 'انضاف للسلة ✓', rm: 'حذف', inc: 'زيادة', dec: 'إنقاص', items: n => n + (n === 1 ? ' عطر' : n === 2 ? ' عطران' : n <= 10 ? ' عطور' : ' عطر') },
+    en: { hi: 'Hello 🌹', intro: 'I’d like to order from Sabascents:', total: 'Total', sub: 'Perfumes', ship: 'Delivery', pay: 'Payment', pick: 'Choose a delivery option first 👆', added: 'Added to basket ✓', rm: 'Remove', inc: 'More', dec: 'Less', items: n => n + (n === 1 ? ' item' : ' items') },
+    tr: { hi: 'Merhaba 🌹', intro: 'Sabascents’ten sipariş vermek istiyorum:', total: 'Toplam', sub: 'Parfümler', ship: 'Teslimat', pay: 'Ödeme', pick: 'Önce teslimat seçin 👆', added: 'Sepete eklendi ✓', rm: 'Kaldır', inc: 'Artır', dec: 'Azalt', items: n => n + ' ürün' },
+    ru: { hi: 'Здравствуйте 🌹', intro: 'Хочу заказать в Sabascents:', total: 'Итого', sub: 'Ароматы', ship: 'Доставка', pay: 'Оплата', pick: 'Сначала выберите доставку 👆', added: 'Добавлено в корзину ✓', rm: 'Удалить', inc: 'Больше', dec: 'Меньше', items: n => n + ' ' + ruPl(n, 'товар', 'товара', 'товаров') },
   }[LG] || {};
   const KEY = 'sabaCart', box = document.getElementById('cart');
   if (!box) return;
@@ -227,14 +227,19 @@ document.querySelectorAll('.langs').forEach(n => {
   const wa = (document.getElementById('csend').getAttribute('href') || '').split('?')[0];
   const cnt = document.getElementById('ccount'), list = document.getElementById('clist');
   let cart = load();
+  const DLK = 'sabaDelivery', dlIn = () => document.querySelector('#cdl input:checked');
+  try { const k = localStorage.getItem(DLK), r = k && document.querySelector('#cdl input[value="' + k + '"]'); if (r) r.checked = true; } catch {}
   function render() {
     const n = cart.reduce((a, it) => a + it.q, 0), tot = cart.reduce((a, it) => a + it.q * it.p, 0);
     cnt.hidden = !n; cnt.textContent = n;
     document.getElementById('cempty').hidden = !!cart.length; document.getElementById('cft').hidden = !cart.length;
     list.innerHTML = cart.map((it, i) => `<div class="ci"><a href="${pre}/p/${it.slug}/"><img src="${it.img}" alt="" loading="lazy"></a><div class="ci-t"><a href="${pre}/p/${it.slug}/"><b>${esc(it.n)}</b></a>${LG === 'ar' && it.na ? `<small class="ci-ar">${esc(it.na)}</small>` : ''}<small>${esc(brand(it))}${it.sz ? ' · ' + esc(it.sz) : ''}</small><span class="ci-p">${money(it.p * it.q)}</span></div><div class="ci-q"><button type="button" data-i="${i}" data-d="1" aria-label="${CT.inc}">+</button><span>${it.q}</span><button type="button" data-i="${i}" data-d="-1" aria-label="${CT.dec}">−</button></div><button type="button" class="ci-x" data-i="${i}" data-x aria-label="${CT.rm}">×</button></div>`).join('');
-    document.getElementById('ctot').textContent = money(tot);
+    const dl = dlIn(), fee = dl ? +dl.dataset.fee : 0;
+    document.getElementById('csub').textContent = money(tot);
+    document.getElementById('cship').textContent = dl ? money(fee) : '—';
+    document.getElementById('ctot').textContent = money(tot + fee);
     const lines = cart.map((it, i) => `${i + 1}) ${name(it)} — ${brand(it)}${it.sz ? ' — ' + it.sz : ''} × ${it.q} = ${money(it.p * it.q)}`);
-    const msg = [CT.hi, CT.intro, '', ...lines, '', `${CT.total}: ${money(tot)} (${CT.items(n)})`].join('\n');
+    const msg = [CT.hi, CT.intro, '', ...lines, '', `${CT.sub}: ${money(tot)} (${CT.items(n)})`, ...(dl ? [`${CT.ship}: ${dl.dataset.t} = ${money(fee)}`, `${CT.pay}: ${dl.dataset.pay}`] : []), `${CT.total}: ${money(tot + fee)}`].join('\n');
     document.getElementById('csend').href = wa + '?text=' + encodeURIComponent(msg);
   }
   const open = () => { box.hidden = false; requestAnimationFrame(() => box.classList.add('on')); document.documentElement.classList.add('cart-open'); window.__lenis && window.__lenis.stop(); };
@@ -248,6 +253,13 @@ document.querySelectorAll('.langs').forEach(n => {
     else if (t.dataset.d) { cart[i].q = Math.max(1, Math.min(20, cart[i].q + +t.dataset.d)); }
     else return;
     save(cart); render();
+  });
+  document.getElementById('cdl').addEventListener('change', () => { const d = dlIn(); try { d && localStorage.setItem(DLK, d.value); } catch {} document.getElementById('cdl').classList.remove('need'); render(); });
+  document.getElementById('csend').addEventListener('click', e => {
+    if (dlIn()) return;
+    e.preventDefault(); const f = document.getElementById('cdl');
+    f.querySelector('legend').dataset.pick = CT.pick; f.classList.remove('need'); void f.offsetWidth; f.classList.add('need');
+    f.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   });
   document.getElementById('cclear').addEventListener('click', () => { cart = []; save(cart); render(); });
   addEventListener('keydown', e => { if (e.key === 'Escape' && !box.hidden) close(); });
