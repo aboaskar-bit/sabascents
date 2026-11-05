@@ -13,12 +13,17 @@ const qs = new URLSearchParams(location.search).get('q');
 if (qs && q) { box.hidden = false; q.value = qs; q.dispatchEvent(new Event('input')); }
 
 // filters + sort
-document.querySelectorAll('.chips').forEach(ch => {
+document.querySelectorAll('.fbar').forEach(ch => {
   const grid = ch.nextElementSibling;
-  ch.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
-    ch.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
-    grid.querySelectorAll('.pc').forEach(c => c.hidden = !(b.dataset.f === '*' || c.dataset.b === b.dataset.f));
-  }));
+  const cnt = document.querySelector('.phead .count');
+  const apply = (b, push) => {
+    ch.querySelectorAll('.chips button').forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b); });
+    let n = 0; grid.querySelectorAll('.pc').forEach(c => { const show = b.dataset.f === '*' || c.dataset.b === b.dataset.f; c.hidden = !show; if (show) n++; });
+    if (cnt) cnt.textContent = n + ' منتج';
+    if (push) { const u = new URL(location); b.dataset.f === '*' ? u.searchParams.delete('brand') : u.searchParams.set('brand', b.dataset.f); history.replaceState(null, '', u); }
+  };
+  ch.querySelectorAll('.chips button').forEach(b => b.addEventListener('click', () => { apply(b, true); b.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' }); }));
+  const pre = new URLSearchParams(location.search).get('brand'); const pb = pre && ch.querySelector(`.chips button[data-f="${CSS.escape(pre)}"]`); if (pb) apply(pb, false);
   const s = ch.querySelector('.sort');
   s && s.addEventListener('change', () => {
     const items = [...grid.children]; const k = s.value;
