@@ -202,10 +202,10 @@ details p{margin-top:8px;color:var(--mute)}
 /* scroll commercial */
 .reel{position:relative;height:calc((var(--n) + .6) * 100svh);background:#1b030a;padding:0}
 .reel .stage{position:sticky;top:0;height:100svh;overflow:hidden;color:#fff}
-.reel canvas{position:absolute;top:0;bottom:0;inset-inline-end:0;width:min(56.25svh,46%);height:100%;display:block}
-.reel .shade{position:absolute;inset:0;background:linear-gradient(270deg,#1b030a 0%,#1b030a 50%,rgba(27,3,10,.55) calc(54% - 0px),transparent 62%);pointer-events:none}
+.reel canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.reel .shade{position:absolute;inset:0;background:linear-gradient(270deg,rgba(27,3,10,.78) 0%,rgba(27,3,10,.45) 40%,transparent 62%),linear-gradient(0deg,rgba(27,3,10,.5),transparent 25%);pointer-events:none}
 .reel .copy{position:relative;z-index:2;height:100%;display:grid}
-.reel .shot{grid-area:1/1;align-self:center;max-width:520px;opacity:0;transform:translateY(26px);transition:opacity .6s,transform .8s cubic-bezier(.2,.7,.2,1);pointer-events:none}
+.reel .shot{grid-area:1/1;align-self:center;max-width:min(560px,46%);opacity:0;transform:translateY(26px);transition:opacity .6s,transform .8s cubic-bezier(.2,.7,.2,1);pointer-events:none}
 .reel .shot.on{opacity:1;transform:none;pointer-events:auto}
 .reel .ln{font-size:clamp(40px,6vw,80px);font-weight:900;line-height:1.15;margin-bottom:26px}
 .reel .ln em{font-style:normal;color:var(--gold)}
@@ -225,9 +225,9 @@ details p{margin-top:8px;color:var(--mute)}
 .reel.started .hintm{opacity:0}
 @media(max-width:1000px){
   .reel canvas{width:100%;inset-inline-end:0}
-  .reel .shade{background:linear-gradient(0deg,rgba(20,2,8,.95) 0%,rgba(20,2,8,.7) 30%,rgba(20,2,8,0) 58%),linear-gradient(180deg,rgba(20,2,8,.35),transparent 14%)}
-  .reel .shot{align-self:end;padding-bottom:calc(104px + var(--off,0px));max-width:none}
-  .reel .ln{font-size:clamp(34px,10vw,52px);margin-bottom:16px}
+  .reel .shade{background:linear-gradient(0deg,rgba(20,2,8,.85) 0%,rgba(20,2,8,.35) 28%,rgba(20,2,8,0) 45%)}
+  .reel .shot{align-self:end;padding-bottom:calc(92px + var(--off,0px));max-width:none}
+  .reel .ln{font-size:clamp(30px,8.6vw,52px);margin-bottom:14px}.reel .shot .eyebrow{display:none}
   .pcap{width:100%;padding:10px 12px}.pcap b{font-size:16px}
   .reel .ctas .cta{flex:1;justify-content:center;padding:13px 16px}
   .hintm{bottom:18px}
