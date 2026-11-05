@@ -206,3 +206,69 @@ document.querySelectorAll('.langs').forEach(n => {
   cur && cur.addEventListener('click', e => { if (innerWidth <= 700) { e.preventDefault(); n.classList.toggle('open'); } });
   document.addEventListener('click', e => { if (!n.contains(e.target)) n.classList.remove('open'); });
 });
+
+// ---------------- order basket (one WhatsApp message for many perfumes) ----------------
+(() => {
+  const CT = {
+    ar: { hi: 'السلام عليكم 🌹', intro: 'أبغى أطلب من سبأ للعطور:', total: 'المجموع', added: 'انضاف للسلة ✓', rm: 'حذف', inc: 'زيادة', dec: 'إنقاص', items: n => n + (n === 1 ? ' عطر' : n === 2 ? ' عطران' : n <= 10 ? ' عطور' : ' عطر') },
+    en: { hi: 'Hello 🌹', intro: 'I’d like to order from Sabascents:', total: 'Total', added: 'Added to basket ✓', rm: 'Remove', inc: 'More', dec: 'Less', items: n => n + (n === 1 ? ' item' : ' items') },
+    tr: { hi: 'Merhaba 🌹', intro: 'Sabascents’ten sipariş vermek istiyorum:', total: 'Toplam', added: 'Sepete eklendi ✓', rm: 'Kaldır', inc: 'Artır', dec: 'Azalt', items: n => n + ' ürün' },
+    ru: { hi: 'Здравствуйте 🌹', intro: 'Хочу заказать в Sabascents:', total: 'Итого', added: 'Добавлено в корзину ✓', rm: 'Удалить', inc: 'Больше', dec: 'Меньше', items: n => n + ' ' + ruPl(n, 'товар', 'товара', 'товаров') },
+  }[LG] || {};
+  const KEY = 'sabaCart', box = document.getElementById('cart');
+  if (!box) return;
+  const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch { return []; } };
+  const save = c => { try { localStorage.setItem(KEY, JSON.stringify(c)); } catch {} };
+  const money = v => Number(v).toLocaleString('en-US') + ' ₺';
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const name = it => LG === 'ar' && it.na ? `${it.n} · ${it.na}` : it.n;
+  const brand = it => LG === 'ar' ? it.ba || it.b : it.b;
+  const pre = { ar: '', en: '/en', tr: '/tr', ru: '/ru' }[LG] || '';
+  const wa = (document.getElementById('csend').getAttribute('href') || '').split('?')[0];
+  const cnt = document.getElementById('ccount'), list = document.getElementById('clist');
+  let cart = load();
+  function render() {
+    const n = cart.reduce((a, it) => a + it.q, 0), tot = cart.reduce((a, it) => a + it.q * it.p, 0);
+    cnt.hidden = !n; cnt.textContent = n;
+    document.getElementById('cempty').hidden = !!cart.length; document.getElementById('cft').hidden = !cart.length;
+    list.innerHTML = cart.map((it, i) => `<div class="ci"><a href="${pre}/p/${it.slug}/"><img src="${it.img}" alt="" loading="lazy"></a><div class="ci-t"><a href="${pre}/p/${it.slug}/"><b>${esc(it.n)}</b></a>${LG === 'ar' && it.na ? `<small class="ci-ar">${esc(it.na)}</small>` : ''}<small>${esc(brand(it))}${it.sz ? ' · ' + esc(it.sz) : ''}</small><span class="ci-p">${money(it.p * it.q)}</span></div><div class="ci-q"><button type="button" data-i="${i}" data-d="1" aria-label="${CT.inc}">+</button><span>${it.q}</span><button type="button" data-i="${i}" data-d="-1" aria-label="${CT.dec}">−</button></div><button type="button" class="ci-x" data-i="${i}" data-x aria-label="${CT.rm}">×</button></div>`).join('');
+    document.getElementById('ctot').textContent = money(tot);
+    const lines = cart.map((it, i) => `${i + 1}) ${name(it)} — ${brand(it)}${it.sz ? ' — ' + it.sz : ''} × ${it.q} = ${money(it.p * it.q)}`);
+    const msg = [CT.hi, CT.intro, '', ...lines, '', `${CT.total}: ${money(tot)} (${CT.items(n)})`].join('\n');
+    document.getElementById('csend').href = wa + '?text=' + encodeURIComponent(msg);
+  }
+  const open = () => { box.hidden = false; requestAnimationFrame(() => box.classList.add('on')); document.documentElement.classList.add('cart-open'); window.__lenis && window.__lenis.stop(); };
+  const close = () => { box.classList.remove('on'); document.documentElement.classList.remove('cart-open'); window.__lenis && window.__lenis.start(); setTimeout(() => { if (!box.classList.contains('on')) box.hidden = true; }, 380); };
+  document.getElementById('cbtn').addEventListener('click', open);
+  box.addEventListener('click', e => {
+    const t = e.target.closest('button,[data-close]'); if (!t) return;
+    if (t.hasAttribute('data-close')) return close();
+    const i = +t.dataset.i;
+    if (t.hasAttribute('data-x')) cart.splice(i, 1);
+    else if (t.dataset.d) { cart[i].q = Math.max(1, Math.min(20, cart[i].q + +t.dataset.d)); }
+    else return;
+    save(cart); render();
+  });
+  document.getElementById('cclear').addEventListener('click', () => { cart = []; save(cart); render(); });
+  addEventListener('keydown', e => { if (e.key === 'Escape' && !box.hidden) close(); });
+  addEventListener('storage', e => { if (e.key === KEY) { cart = load(); render(); } });
+  // product page: add the chosen size
+  const add = document.getElementById('addc');
+  if (add) {
+    const sync = () => { const v = document.querySelector('.vars input:checked'); add.disabled = !!v && v.dataset.ok === '0'; };
+    document.querySelectorAll('.vars input').forEach(i => i.addEventListener('change', sync)); sync();
+    add.addEventListener('click', () => {
+      const v = document.querySelector('.vars input:checked') || {}, d = add.dataset, sz = v.dataset ? v.dataset.sz : '', id = d.slug + '|' + (v.dataset ? v.dataset.raw : '');
+      const ex = cart.find(it => it.id === id);
+      if (ex) ex.q = Math.min(20, ex.q + 1);
+      else cart.push({ id, slug: d.slug, n: d.n, na: d.na, b: d.b, ba: d.ba, img: d.img, sz, p: +(v.dataset ? v.dataset.pr : 0), q: 1 });
+      save(cart); render();
+      add.classList.add('ok'); add.querySelector('span').dataset.t = add.querySelector('span').dataset.t || add.querySelector('span').textContent;
+      add.querySelector('span').textContent = CT.added;
+      setTimeout(() => { add.classList.remove('ok'); add.querySelector('span').textContent = add.querySelector('span').dataset.t; }, 1600);
+      cnt.classList.remove('pop'); void cnt.offsetWidth; cnt.classList.add('pop');
+      open();
+    });
+  }
+  render();
+})();

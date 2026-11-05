@@ -422,3 +422,66 @@ button,input,select,textarea{font:inherit;letter-spacing:inherit;color:inherit}
 .brands2 .bgrid2{position:relative;z-index:2}
 @media(max-width:1000px){.bstage{min-height:0;padding:48px 0 calc(66.7vw - 10px);background:linear-gradient(180deg,transparent 80%,var(--cream) 99%),url(/img/bg/brands-m.webp) center bottom/100% auto no-repeat,#47031f;margin-bottom:-30px}}
 @media(max-width:1000px){.bstage{padding-bottom:calc(66.7vw + 6px);margin-bottom:6px;background:linear-gradient(180deg,transparent 92%,var(--cream) 100%),url(/img/bg/brands-m.webp) center bottom/100% auto no-repeat,#47031f}}
+
+/* ---- 2026-11-05 client round: crown-only logo, smaller product image, order basket ---- */
+.hdr .logo img.crown{border-radius:0;width:58px;height:auto}
+@media(max-width:700px){.hdr .logo img.crown{width:48px}}
+
+/* product image: whole bottle visible on first view (like big brand stores) */
+.gal{justify-items:center}
+.gal .main{width:auto;height:auto;max-width:100%;max-height:min(calc(100svh - 190px),680px);aspect-ratio:2/3}
+.gal .alt{max-width:180px}
+@media(max-width:900px){
+  .gal .main{max-height:52svh;border-radius:22px}
+  .gal .alt{display:none}
+  .pd{padding-top:14px}
+}
+
+/* basket */
+.cartb{position:relative}
+.cartb .cc{position:absolute;top:3px;inset-inline-end:1px;min-width:18px;height:18px;padding:0 5px;border-radius:99px;background:var(--wine2);color:#fff;font:700 11px/18px system-ui,sans-serif;text-align:center}
+.cartb .cc.pop{animation:ccpop .5s cubic-bezier(.22,1,.36,1)}
+@keyframes ccpop{0%{transform:scale(.4)}60%{transform:scale(1.3)}100%{transform:scale(1)}}
+.btn.addc{grid-column:1/-1;background:var(--wine2);color:#fff;border:0;cursor:pointer;font-size:16px}
+.btn.addc:hover{background:var(--wine3)}
+.btn.addc.ok{background:#1d6b33}
+.btn.addc:disabled{opacity:.45;cursor:not-allowed}
+.cartw{position:fixed;inset:0;z-index:200}
+.cartw[hidden]{display:none!important}
+.cart-bg{position:absolute;inset:0;background:rgba(36,16,22,.45);opacity:0;transition:opacity .35s}
+.cart-p{position:absolute;top:0;bottom:0;inset-inline-end:0;width:min(420px,100%);background:var(--paper);display:flex;flex-direction:column;box-shadow:0 0 60px rgba(0,0,0,.25);transform:translateX(-100%);transition:transform .38s cubic-bezier(.22,1,.36,1)}
+[dir=ltr] .cart-p{transform:translateX(100%)}
+.cartw.on .cart-bg{opacity:1}.cartw.on .cart-p{transform:none}
+.cart-hd{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #e8dccb}
+.cart-hd h2{display:flex;align-items:center;gap:10px;font-size:20px;color:var(--wine2)}
+.cart-hd h2 svg{width:22px;height:22px}
+.cart-list{flex:1;overflow:auto;padding:8px 20px;overscroll-behavior:contain}
+.ci{display:grid;grid-template-columns:62px 1fr auto auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #efe4d2}
+.ci img{width:62px;height:78px;object-fit:cover;border-radius:12px;background:#efe4d2}
+.ci-t{display:grid;line-height:1.35;min-width:0}
+.ci-t b{font-size:15px;color:var(--ink);overflow:hidden;text-overflow:ellipsis}
+.ci-t small{color:var(--mute);font-size:12.5px}
+.ci-p{color:var(--wine2);font-weight:700;font-size:14px;margin-top:3px}
+.ci-q{display:flex;align-items:center;gap:6px;border:1px solid #d9c9b0;border-radius:99px;padding:2px}
+.ci-q button{width:28px;height:28px;border-radius:50%;font-size:17px;color:var(--wine2);cursor:pointer}
+.ci-q button:hover{background:#efe4d2}
+.ci-q span{min-width:16px;text-align:center;font-weight:700}
+.ci-x{width:30px;height:30px;border-radius:50%;color:var(--mute);font-size:20px;cursor:pointer}
+.ci-x:hover{background:#f6e0e3;color:#8a1730}
+.cart-empty{padding:40px 24px;text-align:center;color:var(--mute)}
+.cart-ft{padding:16px 20px 20px;border-top:1px solid #e8dccb;display:grid;gap:10px;background:#fff}
+.cart-tot{display:flex;justify-content:space-between;align-items:baseline;font-size:17px}
+.cart-tot b{font-size:22px;color:var(--wine2)}
+.cart-ft .hint{margin:0;font-size:12.5px;color:var(--mute);text-align:center}
+.cart-clear{justify-self:center;font-size:13px;color:var(--mute);text-decoration:underline;cursor:pointer}
+html.cart-open{overflow:hidden}
+/* phone: order buttons stay docked at the bottom while reading (like big brand stores) */
+@media(max-width:900px){
+  .gal .main{max-height:46svh}
+  .cta2:has(.addc){position:sticky;bottom:0;z-index:30;grid-template-columns:1fr auto auto;gap:8px;margin:0 -16px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(251,247,240,.96);backdrop-filter:blur(10px);border-top:1px solid #e8dccb;box-shadow:0 -8px 24px rgba(36,16,22,.08)}
+  .cta2:has(.addc) .addc{grid-column:auto}
+  .cta2:has(.addc) .btn{padding:13px 16px}
+  .cta2:has(.addc) .wa span,.cta2:has(.addc) .igb span{display:none}
+  body:has(#addc) .fab{display:none}
+}
+.ci-ar{color:var(--ink)!important;font-size:13.5px!important}
