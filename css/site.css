@@ -514,3 +514,30 @@ button.add.ok{background:#2e7d4f;color:#fff}
 .film-cap .cta{display:inline-flex}
 @media(max-width:700px){.film{aspect-ratio:2/3;max-height:none}}
 @media(max-width:700px){.film{aspect-ratio:auto;display:flex;flex-direction:column}.film .fv{position:relative;inset:auto;aspect-ratio:2/3;height:auto}.film::after{display:none}.film-cap{position:relative;padding:20px 0 30px;background:#1a0309}.film-cap h2{font-size:30px;margin:4px 0 14px}}
+
+/* ---- rawh.qa benchmark round: trust strip, guide teaser, guide page ---- */
+.trust2{background:var(--cream);border-bottom:1px solid #e8dccb}
+.trust2 ul{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);gap:0;padding:0;margin:0}
+.trust2 li{padding:18px 16px;display:grid;gap:2px;text-align:center;border-inline-start:1px solid #e3d5bf}
+.trust2 li:first-child{border-inline-start:0}
+.trust2 b{color:var(--wine2);font-size:16px}
+.trust2 span{color:var(--mute);font-size:13px;line-height:1.5}
+@media(max-width:800px){.trust2 ul{grid-template-columns:1fr 1fr}.trust2 li:nth-child(3){border-inline-start:0}.trust2 li:nth-child(n+3){border-top:1px solid #e3d5bf}.trust2 li{padding:14px 10px}.trust2 b{font-size:15px}.trust2 span{font-size:12px}}
+.gteaser{padding:clamp(48px,7vw,90px) 0;background:var(--paper)}
+.gteaser .wrap{display:grid;gap:26px}
+.gt-h h2{font-family:ThmanyahSerif,PlayfairCyr,serif;font-size:clamp(28px,3.4vw,46px);color:var(--wine2);line-height:1.2}
+.gt-c{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.gt{display:grid;gap:10px;padding:26px 24px;border-radius:var(--r);background:#fff;border:1px solid #eadfcc;transition:transform .4s cubic-bezier(.22,1,.36,1),box-shadow .4s}
+.gt:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(58,7,22,.1)}
+.gt span{font-family:ThmanyahSerif,PlayfairCyr,serif;color:var(--gold2);font-size:28px;line-height:1}
+.gt b{font-size:19px;color:var(--ink)}
+.gteaser .cta{justify-self:start}
+@media(max-width:800px){.gt-c{grid-template-columns:1fr}}
+.guide{padding:10px 0 70px}
+.guide .wrap{display:grid;gap:18px;max-width:860px}
+.gd{background:#fff;border:1px solid #eadfcc;border-radius:var(--r);padding:26px 28px;scroll-margin-top:110px}
+.gd .gn{font-family:ThmanyahSerif,PlayfairCyr,serif;color:var(--gold2);font-size:26px}
+.gd h2{font-size:clamp(22px,2.4vw,28px);color:var(--wine2);margin:4px 0 8px}
+.gd p{color:var(--ink);font-size:17px;line-height:1.9}
+.gcta{margin-top:10px}
+.gteaser .cta.ghost{background:transparent;color:var(--wine2);border:1.5px solid var(--wine2)}.gteaser .cta.ghost:hover{background:var(--wine2);color:#fff}
