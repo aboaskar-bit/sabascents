@@ -264,6 +264,18 @@ document.querySelectorAll('.langs').forEach(n => {
   document.getElementById('cclear').addEventListener('click', () => { cart = []; save(cart); render(); });
   addEventListener('keydown', e => { if (e.key === 'Escape' && !box.hidden) close(); });
   addEventListener('storage', e => { if (e.key === KEY) { cart = load(); render(); } });
+  // product cards: one tap adds the first in-stock size
+  document.addEventListener('click', e => {
+    const q = e.target.closest('.addq'); if (!q) return;
+    e.preventDefault(); const d = q.dataset, id = d.slug + '|' + d.raw;
+    const ex = cart.find(it => it.id === id);
+    if (ex) ex.q = Math.min(20, ex.q + 1);
+    else cart.push({ id, slug: d.slug, n: d.n, na: d.na, b: d.b, ba: d.ba, img: d.img, sz: d.sz, p: +d.pr, q: 1 });
+    save(cart); render();
+    const sp = q.querySelector('span'); sp.dataset.t = sp.dataset.t || sp.textContent; sp.textContent = CT.added; q.classList.add('ok');
+    setTimeout(() => { q.classList.remove('ok'); sp.textContent = sp.dataset.t; }, 1600);
+    cnt.classList.remove('pop'); void cnt.offsetWidth; cnt.classList.add('pop');
+  });
   // product page: add the chosen size
   const add = document.getElementById('addc');
   if (add) {
