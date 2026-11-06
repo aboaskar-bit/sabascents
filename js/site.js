@@ -296,3 +296,16 @@ document.querySelectorAll('.langs').forEach(n => {
   }
   render();
 })();
+
+// Flow film: load the right mp4 only when the band is near the viewport (keeps first load light)
+(() => {
+  const v = document.querySelector('.film .fv'); if (!v) return;
+  const mob = matchMedia('(max-width:700px)').matches, c = navigator.connection || {};
+  if (mob) v.poster = v.dataset.pm;
+  if (c.saveData || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const go = () => { v.src = mob ? v.dataset.m : v.dataset.d; v.play().catch(() => {}); };
+  if (!('IntersectionObserver' in window)) return go();
+  const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { io.disconnect(); go(); } }, { rootMargin: '300px' });
+  const start = () => setTimeout(() => io.observe(v), 600);
+  document.readyState === 'complete' ? start() : addEventListener('load', start, { once: true });
+})();

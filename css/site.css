@@ -503,3 +503,14 @@ html.cart-open{overflow:hidden}
 /* card add-to-basket button */
 button.add{border:0;cursor:pointer;font:inherit;width:100%}
 button.add.ok{background:#2e7d4f;color:#fff}
+
+/* ---- Flow film band (lazy video like rawh.qa: poster first, mp4 only when near view) ---- */
+.film{position:relative;overflow:hidden;background:#1a0309;aspect-ratio:16/9;max-height:86svh;width:100%}
+.film .fv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.film::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(26,3,9,.82),rgba(26,3,9,.1) 55%,transparent)}
+.film-cap{position:absolute;inset:auto 0 0 0;z-index:2;padding:0 0 clamp(26px,5vw,64px);color:#fff}
+.film-cap .eyebrow{color:var(--gold)}
+.film-cap h2{font-family:ThmanyahSerif,PlayfairCyr,serif;font-size:clamp(30px,4.2vw,64px);line-height:1.15;margin:6px 0 18px;max-width:16ch}
+.film-cap .cta{display:inline-flex}
+@media(max-width:700px){.film{aspect-ratio:2/3;max-height:none}}
+@media(max-width:700px){.film{aspect-ratio:auto;display:flex;flex-direction:column}.film .fv{position:relative;inset:auto;aspect-ratio:2/3;height:auto}.film::after{display:none}.film-cap{position:relative;padding:20px 0 30px;background:#1a0309}.film-cap h2{font-size:30px;margin:4px 0 14px}}
